@@ -1,11 +1,5 @@
 name: GR00T Setup
 
-on:
-  workflow_dispatch: 
-  workflow_run:
-    workflows: ["Brev Environment Setup"]
-    types: [completed]
-
 jobs:
   gr00t-install:
     runs-on: ubuntu-latest
