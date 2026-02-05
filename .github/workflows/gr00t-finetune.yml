@@ -1,0 +1,20 @@
+name: GR00T Fine-tune
+on:
+  workflow_dispatch:
+
+jobs:
+  gr00t-finetune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Step 13 - Download Dataset
+        run: ssh -F ~/.brev/ssh_config test1-pipeline "cd ~/Isaac-GR00T;
+          ~/.local/bin/uv run hf download VoicAndrei/${{ variables.HF_REPO_NAME }} --repo-type dataset --local-dir ./hf_datasets/${{ variables.HF_REPO_NAME }};
+          "
+      - name: Step 14 - Run finetune
+        run: ssh -F ~/.brev/ssh_config test1-pipeline "cd ~/Isaac-GR00T;
+          export NUM_GPUS=1;
+          CUDA_VISIBLE_DEVICES=0 ~/.local/bin/uv run python gr00t/experiment/launch_finetune.py --base_model_path nvidia/GR00T-N1.6-3B --dataset_path ./hf_datasets/${{ variables.HF_REPO_NAME }} --modality_config_path ~/modality_files/${{ variables.MODALITY_FILE }} --embodiment_tag NEW_EMBODIMENT --num_gpus \$NUM_GPUS --output_dir /models/${{ variables.HF_REPO_NAME }} --save_steps ${{ variables.SAVE_STEPS }} --save_total_limit 5 --max_steps ${{ variables.MAX_STEPS }} --warmup_ratio 0.05 --weight_decay 1e-5 --learning_rate 1e-4 --global_batch_size 32 --color_jitter_params brightness 0.3 contrast 0.4 saturation 0.5 hue 0.08 --dataloader_num_workers 4;
+          "

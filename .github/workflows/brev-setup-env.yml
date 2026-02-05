@@ -1,0 +1,74 @@
+name: Brev Environment Setup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  brev-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Brev CLI
+        run: |
+          sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/brevdev/brev-cli/main/bin/install-latest.sh)"
+
+      - name: Login to Brev
+        run: echo "No" | brev login --token ${{ secrets.BREV_TOKEN }} --skip-browser
+
+      - name: Enter Brev with shell to create ssh config
+        run: brev shell ${{ variables.BREV_INSTANCE_NAME }}
+
+      - name: Step 0 - Basic sanity checks
+        run: ssh -F ~/.brev/ssh_config test1-pipeline "echo == OS ==;
+          . /etc/os-release;
+          echo \$PRETTY_NAME;
+          echo == GPU / Driver ==;
+          nvidia-smi
+          "
+
+      - name: Step 1 - System dependencies
+        run: ssh -F ~/.brev/ssh_config test1-pipeline "sudo apt-get update;
+          sudo apt-get install -y git curl wget gnupg ca-certificates build-essential python3-dev ninja-build cmake pkg-config"
+
+      - name: Step 2 - Remove Ubuntu's nvidia-cuda-toolkit
+        run: ssh -F ~/.brev/ssh_config test1-pipeline "sudo apt-get purge -y nvidia-cuda-toolkit || true;
+          sudo apt-get autoremove -y || true"
+
+      - name: Step 3 - Install NVIDIA CUDA Toolkit 12.4
+        run: ssh -F ~/.brev/ssh_config test1-pipeline "sudo apt-get update;
+          . /etc/os-release;
+          UBU_VER=\"\${VERSION_ID//./}\";
+          CUDA_REPO_URL=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu\${UBU_VER}/x86_64/cuda-keyring_1.1-1_all.deb;
+          echo == Installing CUDA repo keyring from \$CUDA_REPO_URL ==;
+          wget -q \$CUDA_REPO_URL -O /tmp/cuda-keyring.deb;
+          sudo dpkg -i /tmp/cuda-keyring.deb;
+          sudo apt-get update;
+          echo == Installing CUDA toolkit 12.4 ==;
+          sudo apt-get install -y cuda-toolkit-12-4;
+          "
+
+      - name: Step 4 - Make sure we use CUDA 12.4 in PATH
+        run: ssh -F ~/.brev/ssh_config test1-pipeline "echo == PATH ==;
+          if ! grep -q \"cuda-12.4\" ~/.bashrc; then
+          {
+          echo \"\";
+          echo \"# CUDA 12.4 (for GR00T + flash-attn)\";
+          echo \"export CUDA_HOME=/usr/local/cuda-12.4\";
+          echo \"export PATH=\\\$CUDA_HOME/bin:\\\$PATH\";
+          echo \"export LD_LIBRARY_PATH=\\\$CUDA_HOME/lib64:\\\$LD_LIBRARY_PATH\";
+          } >> ~/.bashrc;
+          fi;
+          export CUDA_HOME=/usr/local/cuda-12.4;
+          export PATH=\$CUDA_HOME/bin:\$PATH;
+          export LD_LIBRARY_PATH=\$CUDA_HOME/lib64:\$LD_LIBRARY_PATH;
+          echo == nvcc should be 12.4 now ==;
+          which nvcc;
+          nvcc --version;
+          "
+
+      - name: Step 5 - Install uv
+        run: ssh -F ~/.brev/ssh_config test1-pipeline "curl -LsSf https://astral.sh/uv/install.sh | sh;
+          ~/.local/bin/uv --version;
+          "
