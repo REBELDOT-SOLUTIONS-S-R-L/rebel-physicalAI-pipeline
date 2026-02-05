@@ -1,5 +1,8 @@
 name: GR00T Setup
 
+on:
+  workflow_dispatch:
+
 jobs:
   gr00t-install:
     runs-on: ubuntu-latest
