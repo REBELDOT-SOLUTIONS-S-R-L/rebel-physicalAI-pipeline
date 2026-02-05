@@ -81,3 +81,8 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh;
           uv --version
           "
+
+      - name: Test uv
+        run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "
+          uv --version;
+          "
