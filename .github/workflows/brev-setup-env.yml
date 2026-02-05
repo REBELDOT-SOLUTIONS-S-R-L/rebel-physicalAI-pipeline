@@ -18,7 +18,7 @@ jobs:
         run: echo "No" | brev login --token ${{ secrets.BREV_TOKEN }} --skip-browser
 
       - name: Enter Brev with shell to create ssh config
-        run: brev shell ${{ variables.BREV_INSTANCE_NAME }}
+        run: brev shell ${{ vars.BREV_INSTANCE_NAME }}
 
       - name: Step 0 - Basic sanity checks
         run: ssh -F ~/.brev/ssh_config test1-pipeline "echo == OS ==;
