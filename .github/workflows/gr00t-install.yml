@@ -28,7 +28,7 @@ jobs:
           "
 
       - name: Step 3 - Create env + install repo deps
-        run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME } "cd ~/Isaac-GR00T;
+        run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~/Isaac-GR00T;
           ~/.local/bin/uv sync --python 3.10;
           ~/.local/bin/uv pip install -e .;
           "
