@@ -1,4 +1,4 @@
-[200~# AI Model Training Workflows
+# AI Model Training Workflows
 
 Automated pipelines for training, evaluating, and deploying machine learning models. This repository contains reusable GitHub Actions workflows (or your CI/CD platform of choice) that handle the repetitive parts of the ML lifecycle so you can focus on the actual modeling work.
 
