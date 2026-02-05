@@ -84,5 +84,6 @@ jobs:
 
       - name: Test uv
         run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "
+          export PATH=\$HOME/.local/bin:\$PATH;
           uv --version;
           "
