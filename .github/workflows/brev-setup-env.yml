@@ -71,4 +71,5 @@ jobs:
       - name: Step 5 - Install uv
         run: ssh -F ~/.brev/ssh_config test1-pipeline "curl -LsSf https://astral.sh/uv/install.sh | sh;
           ~/.local/bin/uv --version;
+          uv --version
           "
