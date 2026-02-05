@@ -1,48 +1,70 @@
 # AI Model Training Workflows
 
-Automated pipelines for training, evaluating, and deploying machine learning models. This repository contains reusable GitHub Actions workflows (or your CI/CD platform of choice) that handle the repetitive parts of the ML lifecycle so you can focus on the actual modeling work.
+Automated pipelines for training, evaluating, and deploying machine learning models. This repository contains reusable GitHub Actions workflows  that handle the repetitive parts of the ML lifecycle so you can focus on the actual modeling work.
 
 ## What's inside
+At the moment of the creation of this README.md (5/2/2026) this repo contains 3 workflows:
 
-The workflows in this repo cover the core stages of model training automation:
++ Brev Environment Setup 
++ GR00T Setup
++ GR00T Fine-tune
 
-- **Data validation** – checks incoming datasets for schema drift, missing values, and statistical anomalies before training kicks off
-- **Training orchestration** – spins up compute resources, runs training jobs, and handles hyperparameter sweeps
-- **Model evaluation** – compares new models against baselines using your defined metrics
-- **Artifact management** – versions and stores trained models, logs, and metadata
-- **Deployment triggers** – optionally pushes models to staging/production when they pass quality gates
+### [___Brev Environment Setup___](https://github.com/REBELDOT-SOLUTIONS-S-R-L/ROBOTICS-AI-training-pipeline/blob/main/.github/workflows/brev-setup-env.yml)
 
-## Getting started
+This workflow provisions a GPU-enabled remote development environment on Brev with CUDA 12.4 and Python tooling. Installs system dependencies, configures NVIDIA CUDA toolkit, and sets up uv for fast Python package management. Designed to prepare the instance for ML/AI workloads like GR00T and flash-attention.
+#### Steps:
 
-1. Fork or clone this repository
-2. Copy the workflow files you need into your project's `.github/workflows/` directory (or equivalent for your CI system)
-3. Set up the required secrets in your repository settings (see Configuration below)
-4. Adjust the workflow triggers and parameters to match your project structure
++ Manual steps: (Create an instence using the NvidiaBrev UI and start it. Right now Brev CLI does not support creating instances that are not on GCP)
++ Install Brev CLI: Installs the Brev CLI
++ Login to Brev: Login using a token stored in BREV_TOKEN
++ Enter Brev with shell to create ssh config: Use shell to enter the instance (after some tests, the file <code>~/.brev/ssh_config</code> file is not created unless we use the <code>brev shell instance-name</code>, file which is needed so we can execute commands on the instance using ssh conection)
++ Step 0: Verifies the remote instance is accessible and has a working NVIDIA GPU driver by printing the OS version and running <code>nvidia-smi</code>
++ Step 1: Installs essential build tools and development libraries needed for compiling Python packages and CUDA-dependent software.
++ Step 2: Removes Ubuntu's outdated bundled CUDA toolkit to avoid version conflicts before installing the official NVIDIA CUDA 12.4.
++ Step 3: Adds NVIDIA's official CUDA repository (auto-detecting Ubuntu version) and installs CUDA Toolkit 12.4.
++ Step 4: Configures environment variables to use CUDA 12.4 (persists to .bashrc) and verifies nvcc points to the correct version.
++ Step 4.5: Adds ~/.local/bin to PATH in .bashrc so user-installed tools like uv are accessible without full paths.
++ Step 5: Installs uv (a fast Python package manager) and verifies the installation.
 
-### Prerequisites
+### Needed Vars and Secrets:
++ secrets.BREV_TOKEN
++ vars.BREV_INSTANCE_NAME
 
-- Python 3.9+ (or whatever your training scripts require)
-- Access to your compute backend (cloud GPUs, on-prem cluster, etc.)
-- Storage for datasets and model artifacts (S3, GCS, Azure Blob, or similar)
+### [___GR00T Setup___](https://github.com/REBELDOT-SOLUTIONS-S-R-L/ROBOTICS-AI-training-pipeline/blob/main/.github/workflows/gr00t-install.yml)
 
-## Configuration
+Installs NVIDIA's Isaac GR00T robotics foundation model on the Brev instance. Runs automatically after the environment setup (previous workflow) completes (or manually). Clones the repo, creates a Python 3.10 environment with uv, installs PyTorch with CUDA 12.4 support, builds flash-attention for optimized inference, configures Hugging Face authentication, downloads the GR00T-N1.6-3B model weights, and pulls custom modality files.
 
-Each workflow reads from environment variables and repository secrets. At minimum, you'll need:
+#### Steps: 
 
-| Variable | Description |
-|----------|-------------|
-| `CLOUD_CREDENTIALS` | Service account or API key for your cloud provider |
-| `ARTIFACT_BUCKET` | Where to store trained models and logs |
-| `MLFLOW_TRACKING_URI` | (Optional) MLflow server for experiment tracking |
-| `SLACK_WEBHOOK` | (Optional) For training completion notifications |
++ Step 0: Installs the Brev CLI on the GitHub runner to enable SSH access to the remote instance.
++ Step 1: Authenticates with Brev using a stored token and generates the SSH config needed to connect to the instance.
++ Step 2: Clones the NVIDIA Isaac-GR00T repository (with submodules), or pulls latest changes if it already exists.
++ Step 3: Creates a Python 3.10 virtual environment with uv and installs the GR00T package in editable mode.
++ Step 4: Installs PyTorch with CUDA 12.4 support and verifies GPU acceleration is working.
++ Step 5: Builds and installs flash-attention (optimized for Ampere GPUs) using all CPU cores, then verifies the import.
++ Step 5: Installs Hugging Face tools with fast transfer support, configures authentication token, and verifies login.
++ Step 6: Downloads the GR00T-N1.6-3B model weights from Hugging Face.
++ Step 7: Clones custom modality configuration files from Hugging Face, or pulls latest if already present.
 
-Workflow-specific parameters like learning rates, batch sizes, and dataset paths are defined in the YAML files themselves or pulled from a `config.yaml` in your project root.
+#### Needed Vars and Secrets:
 
-## Usage
++ secrets.BREV_TOKEN
++ vars.BREV_INSTANCE_NAME
++ secrets.HF_TOKEN
 
-Most workflows trigger automatically on push to specific branches or on a schedule. You can also run them manually from the Actions tab.
+### [___GR00T Fine-tune___](https://github.com/REBELDOT-SOLUTIONS-S-R-L/ROBOTICS-AI-training-pipeline/blob/main/.github/workflows/gr00t-finetune.yml)
+Runs after _GR00T Setup_ completes (or manually). Downloads a custom dataset from Hugging Face and launches fine-tuning on the GR00T-N1.6-3B model with configurable hyperparameters, modality config, and checkpoint settings.
 
-**Example: trigger a training run manually**
+#### Steps: 
++ Step 0: Installs Brev CLI, authenticates, and generates SSH config for connecting to the remote instance.
++ Step 1: Downloads the training dataset from Hugging Face into the local `hf_datasets` directory.
++ Step 2: Launches GR00T fine-tuning on a single GPU with the downloaded dataset, custom modality config, and configurable training hyperparameters.
 
-```bash
-gh workflow run train.yml -f dataset=v2.3 -f epochs=50
+#### Needed Vars and Secrets:
+
++ secrets.BREV_TOKEN
++ vars.BREV_INSTANCE_NAME
++ vars.HF_REPO_NAME
++ vars.MODALITY_FILE
++ vars.SAVE_STEPS
++ vars.MAX_STEPS
