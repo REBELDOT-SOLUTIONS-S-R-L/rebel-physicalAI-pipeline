@@ -30,7 +30,7 @@ jobs:
 
       - name: Step 1 - System dependencies
         run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "sudo apt-get update;
-          sudo apt-get install -y git curl wget gnupg ca-certificates build-essential python3-dev ninja-build cmake pkg-config"
+          sudo apt-get install -y git curl wget gnupg ca-certificates build-essential python3-dev ninja-build cmake pkg-config tmux"
 
       - name: Step 2 - Remove Ubuntu's nvidia-cuda-toolkit
         run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "sudo apt-get purge -y nvidia-cuda-toolkit || true;
