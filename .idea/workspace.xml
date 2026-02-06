@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d8c25e4-e5c9-4011-867f-b116d10d7edb" name="Changes" comment="feat: add step to install wandb">
+    <list default="true" id="8d8c25e4-e5c9-4011-867f-b116d10d7edb" name="Changes" comment="feat: clone modality in gr00t folder">
       <change beforePath="$PROJECT_DIR$/.github/workflows/gr00t-install.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/gr00t-install.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
@@ -68,7 +68,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "workflow-gr00t-install",
+    "git-widget-placeholder": "#18 on workflow-gr00t-install",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -201,7 +201,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770378039915</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="feat: clone modality in gr00t folder">
+      <option name="closed" value="true" />
+      <created>1770379486949</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1770379486949</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -218,6 +226,7 @@
     <MESSAGE value="feat: add tmux test" />
     <MESSAGE value="feat: creating hf_datasets &amp; fine-tuned directories" />
     <MESSAGE value="feat: add step to install wandb" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add step to install wandb" />
+    <MESSAGE value="feat: clone modality in gr00t folder" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: clone modality in gr00t folder" />
   </component>
 </project>
