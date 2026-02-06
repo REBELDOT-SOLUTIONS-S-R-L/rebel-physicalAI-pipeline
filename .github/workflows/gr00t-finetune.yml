@@ -32,7 +32,7 @@ jobs:
          # "
 
       - name: Step 2 - Launch finetune in tmux
-        run: ssh -F ~/.brev/ssh-config ${{ vars.BREV_INSTANCE_NAME }} "
+        run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "
           tmux new-session -d -s counter;
           tmux send-keys -t counter './infinite_counter.sh' Enter;
           "
