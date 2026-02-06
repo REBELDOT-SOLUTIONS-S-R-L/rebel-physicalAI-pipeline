@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d8c25e4-e5c9-4011-867f-b116d10d7edb" name="Changes" comment="feat: add tmux test">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/gr00t-finetune.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/gr00t-finetune.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/gr00t-install.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/gr00t-install.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +55,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "workflow-gr00t-install",
+    "git-widget-placeholder": "#14 on workflow-gr00t-install",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -81,7 +82,7 @@
       <option name="presentableId" value="Default" />
       <updated>1770283738878</updated>
       <workItem from="1770283739970" duration="10949000" />
-      <workItem from="1770374715321" duration="1188000" />
+      <workItem from="1770374715321" duration="2470000" />
     </task>
     <task id="LOCAL-00001" summary="feat: add gr00t setup pipeline">
       <option name="closed" value="true" />
@@ -179,7 +180,31 @@
       <option name="project" value="LOCAL" />
       <updated>1770374980822</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="feat: add tmux test">
+      <option name="closed" value="true" />
+      <created>1770376174550</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1770376174550</updated>
+    </task>
+    <task id="LOCAL-00014" summary="feat: add tmux test">
+      <option name="closed" value="true" />
+      <created>1770376362453</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1770376362453</updated>
+    </task>
+    <task id="LOCAL-00015" summary="feat: add tmux test">
+      <option name="closed" value="true" />
+      <created>1770376421239</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1770376421239</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
