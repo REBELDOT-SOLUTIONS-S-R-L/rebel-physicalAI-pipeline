@@ -54,7 +54,7 @@ jobs:
           ~/.local/bin/uv run python -c 'import flash_attn; print(\"flash_attn OK:\", flash_attn.__version__)';
           echo == Setup complete. ==;"
 
-      - name: Step 5 - Install Huggingface
+      - name: Step 6 - Install Huggingface
         run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~/Isaac-GR00T;
           ~/.local/bin/uv pip install huggingface-hub hf_transfer;
           echo 'export HF_TOKEN=\"${{ secrets.HF_TOKEN }}\"' >> ~/.bashrc;
@@ -64,12 +64,12 @@ jobs:
           ~/.local/bin/uv run hf auth whoami;
           "
 
-      - name: Step 6 - Download GR00T model
+      - name: Step 7 - Download GR00T model
         run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~/Isaac-GR00T;
           ~/.local/bin/uv run hf download nvidia/GR00T-N1.6-3B;
           "
 
-      - name: Step 7 - Clone Modality Files Repo
+      - name: Step 8 - Clone Modality Files Repo
         run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~;
           if [ ! -d modality_files ]; then
           git clone https://huggingface.co/datasets/VoicAndrei/modality_files;
