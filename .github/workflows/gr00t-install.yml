@@ -68,13 +68,13 @@ jobs:
         run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~/Isaac-GR00T;
           ~/.local/bin/uv run hf download nvidia/GR00T-N1.6-3B;
           "
-      - name: Step 8 - Create directories for fine-tune and modality
+      - name: Step 8 - Create directories for fine-tune and hf_datasets
         run: | 
           ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~/Isaac-GR00T;
             mkdir -p hf_datasets finetuned_models;
 
       - name: Step 9 - Clone Modality Files Repo
-        run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~;
+        run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~/Isaac-GR00T;
           if [ ! -d modality_files ]; then
           git clone https://huggingface.co/datasets/VoicAndrei/modality_files;
           else
