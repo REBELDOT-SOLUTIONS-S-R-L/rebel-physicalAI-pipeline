@@ -72,6 +72,7 @@ jobs:
         run: | 
           ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~/Isaac-GR00T;
             mkdir -p hf_datasets finetuned_models;
+            "
 
       - name: Step 9 - Clone Modality Files Repo
         run: ssh -F ~/.brev/ssh_config ${{ vars.BREV_INSTANCE_NAME }} "cd ~/Isaac-GR00T;
