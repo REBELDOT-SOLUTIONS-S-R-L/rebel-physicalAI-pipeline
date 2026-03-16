@@ -1,0 +1,40 @@
+@startuml
+title AI Robotics Pipelines
+
+actor Alex
+
+participant "Vol/finetune_lerobot_datasets" as V_FT
+participant "Vol/hdf5datasets_lehome_many_clothes" as V_HDF5
+participant "Vol/mimicgen_annotated_hdf5_datasets" as V_MG
+participant "AI-ROBOTICS-CONVERT-ALL-HDF5-TO-LEROBOT" as P_CONVERT
+participant "AI-ROBOTICS-PIPELINE-LEROBOT-UPLOAD" as P_UPLOAD
+participant "AI-ROBOTICS-SSH-FINETUNE-GR00T-PIPELINE" as P_FINETUNE
+participant "AI-ROBOTICS-GENERATE-SYNTHETIC-DATA" as P_SYNTHETIC
+participant "Vol/trained_models" as V_MODELS
+
+Alex -> V_FT : upload a lerobot dataset for finetune
+Alex -> V_HDF5 : upload x number of hdf5 datasets
+Alex -> V_MG : upload hdf5 annotated datasets\nfor synthetic data generation
+
+V_MG -> P_SYNTHETIC: start pipeline
+P_SYNTHETIC -> P_SYNTHETIC: start brev instance
+P_SYNTHETIC -> P_SYNTHETIC: generate multiple hdf5 datasets
+P_SYNTHETIC -> P_CONVERT: start pipeline
+
+
+V_HDF5 -> P_CONVERT : start pipeline
+P_CONVERT -> P_CONVERT : start brev instance and\ncopy all hdf5 datasets to it
+P_CONVERT -> P_CONVERT : convert hdf5 to lerobot format
+P_CONVERT -> P_CONVERT : merge lerobot datasets to\none big lerobot dataset
+P_CONVERT -> V_FT : save dataset for further usage
+P_CONVERT -> P_FINETUNE : start finetune pipeline
+
+
+V_FT -> P_UPLOAD : start pipeline
+P_UPLOAD -> P_UPLOAD : load dataset in brev instance
+P_UPLOAD -> P_FINETUNE : start finetune pipeline
+P_FINETUNE -> P_FINETUNE : setup gr00t env and repo
+P_FINETUNE -> P_FINETUNE : start finetune gr00t model
+
+P_FINETUNE -> V_MODELS : save finetuned model to databricks
+@enduml
