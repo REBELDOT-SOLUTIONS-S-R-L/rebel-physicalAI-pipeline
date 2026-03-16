@@ -1,0 +1,52 @@
+@startuml
+title Convert HDF5 datasets to LeRobot datasets
+
+actor Alex
+
+participant "Vol/hdf5datasets_lehome_many_clothes" as V_HLMC
+participant "AI-ROBOTICS-CONVERT-ALL-HDF5-TO-LEROBOT" as P_ARCAHTL
+participant "BREV-INSTANCE" as I_BI
+participant "Databricks" as DB
+participant "AI-ROBOTICS-SSH-FINETUNE-GR00T-PIPELINE" as P_ARSFGP
+participant "Vol/finetune_lerobot_datasets" as V_FLD
+participant "Vol/lerobot_datasets_lehome_many_clothes" as V_LDLMC
+
+
+Alex -> V_HLMC : Upload n hdf5 files of different clothes
+Alex -> Alex : Creates and starts the brev VM
+Alex -> P_ARCAHTL : Starts the pipeline
+
+group 0-brev-ssh-init-env
+P_ARCAHTL -> DB : Creates a ssh key pair and uploads it
+P_ARCAHTL -> DB : Retrieves all needed scretes
+P_ARCAHTL -> P_ARCAHTL : Install Brev CLI
+P_ARCAHTL -> I_BI : Copy ssh pub key for connection
+P_ARCAHTL -> I_BI : Gets the IP
+P_ARCAHTL -> DB : Loads VM IP to secrets
+end
+
+group 1-convert-all-hdf5s-to-lerobots-and-save-to-databricks
+P_ARCAHTL -> DB : Retrieves all needed scretes
+P_ARCAHTL -> DB : Get ssh private key (notebook based)
+P_ARCAHTL --> I_BI : Connectivity test
+P_ARCAHTL -> I_BI : Install python libraries
+P_ARCAHTL -> I_BI : install ffmpeg globally
+P_ARCAHTL -> I_BI : Create dataset folders
+P_ARCAHTL -> I_BI : Copy all hdf5 datasets
+P_ARCAHTL -> I_BI : Copy the conversion scripts
+P_ARCAHTL -> I_BI : Start tmux session for conversion
+P_ARCAHTL -> I_BI : Polling for data conversion
+P_ARCAHTL --> V_LDLMC : Copy all converted datasets for inspection (optional)
+end
+
+group 2-merge-all-lerobot-datasets
+P_ARCAHTL -> DB : Retrieves all needed scretes
+P_ARCAHTL -> DB : Get ssh private key (notebook based)
+P_ARCAHTL --> I_BI : Connectivity test
+P_ARCAHTL -> I_BI : Copy merging script
+P_ARCAHTL -> I_BI : Start tmux session for merging
+P_ARCAHTL -> I_BI : Polling for data merging
+P_ARCAHTL --> V_FLD : Copy merged dataset for inspection (optional)
+P_ARCAHTL -> P_ARSFGP : Start finetune pipeline with merged dataset
+end
+@enduml
