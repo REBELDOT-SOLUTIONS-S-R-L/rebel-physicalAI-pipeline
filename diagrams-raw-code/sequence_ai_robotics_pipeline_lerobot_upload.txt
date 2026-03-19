@@ -1,0 +1,34 @@
+@startuml
+title Load Lerobot Dataset
+
+actor Alex
+
+participant "Vol/finetune_lerobot_datasets" as V_FLD
+participant "AI-ROBOTICS-PIPELINE-LEROBOT-UPLOAD" as P_ARPLU
+participant "Databricks" as DB
+participant "Brev" as I_BI
+participant "AI-ROBOTICS-SSH-FINETUNE-GR00T-PIPELINE" as P_ARSFGP
+
+
+Alex -> V_FLD : uplaod lerobot dataset
+Alex -> Alex : Creates and starts the instance
+Alex -> P_ARPLU : Starts the pipeline
+
+group 0-brev-ssh-init-env
+P_ARPLU -> DB : Creates a ssh key pair and uploads it
+P_ARPLU -> DB : Retrieves all needed scretes
+P_ARPLU -> P_ARPLU : Install Brev CLI
+P_ARPLU -> I_BI : Copy ssh pub key for connection
+P_ARPLU -> I_BI : Gets the IP
+P_ARPLU -> DB : Loads VM IP to secrets
+end
+
+group 1-uplaod-lerobot-dataset
+P_ARPLU -> DB : Retrieves all needed secrets
+P_ARPLU -> DB : Gets ssh key (notebook based)
+P_ARPLU -> I_BI : Creates folders for dataset
+P_ARPLU -> I_BI : Copy the dataset to brev
+P_ARPLU -> P_ARSFGP: Start finetune pipeline
+end
+
+@enduml
