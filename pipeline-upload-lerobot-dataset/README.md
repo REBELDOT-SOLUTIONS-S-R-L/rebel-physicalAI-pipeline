@@ -16,6 +16,8 @@ The pipeline gets the needed secrets from databricks, ssh into the instance and 
 | 0 | `0-brev-ssh-env-init.ipynb` | Starts the Brev instance, sets up SSH connectivity, retrieves the instance IP |
 | 1 | `1-upload-lerobot-dataset.ipynb` | SSHs into BRev and copies the dataset|
 
+## Notebook Details
+
 ### `secrets-template.ipynb` — Environment Setup 
 
 > This notebook is stored in __pipeline-finetune-gr00t__ but it's used here too for secret retrieval
