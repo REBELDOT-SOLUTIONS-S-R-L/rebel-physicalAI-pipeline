@@ -39,3 +39,6 @@ Starts the Brev GPU instance using the Brev API, waits for it to become reachabl
 - Copies the SSH private key locally for use in SSH commands
 - Creates the directory structure `(lerobot_datasets/merged_dataset)` on the remote instance
 - Uses `scp` to transfer your dataset from Databricks Volumes `(/Volumes/workspace/default/finetune_lerobot_datasets/$DATASET_NAME)` to the Brev instance
+
+## Visual Representation 
+![sequence diagram](../diagrams/AI-ROBOTICS-PIPELINE-LEROBOT-UPLOAD.png)
