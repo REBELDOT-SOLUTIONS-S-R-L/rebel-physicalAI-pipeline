@@ -119,6 +119,9 @@ databricks secrets get-secret <scope-name> <key-name> | jq -r .value | base64 --
 |-----|-------------|
 | `token` | Weights & Biases API token for logging training metrics and experiment tracking |
 
+## Visual Representation
+![sequence diagram](./diagrams/pipelinecorrect.png)
+
 ---
 
 ## Support
