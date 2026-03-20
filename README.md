@@ -7,16 +7,18 @@ There are two main workflows depending on your dataset format:
 
 These workflows are powered by three Databricks pipelines:
 
-| Pipeline | Purpose |
-|----------|---------|
+| Pipeline                                     | Purpose                                                                     |
+|----------------------------------------------|-----------------------------------------------------------------------------|
 | `AI-ROBOTICS-CONVERT-HDF5-TO-LEROBOT-FORMAT` | Converts HDF5 datasets into LeRobot format and saves metrics for dashboards |
-| `AI-ROBOTICS-PIPELINE-LEROBOT-UPLOAD` | Uploads the LeRobot dataset and prepares the environment for fine-tuning |
-| `AI-ROBOTICS-SSH-FINETUNE-GR00T-PIPELINE` | Starts the GR00T model fine-tuning process via SSH |
+| `AI-ROBOTICS-PIPELINE-LEROBOT-UPLOAD`        | Uploads the LeRobot dataset and prepares the environment for fine-tuning    |
+| `AI-ROBOTICS-SSH-FINETUNE-GR00T-PIPELINE`    | Starts the GR00T model fine-tuning process via SSH                          |
+| `AI-ROBOTICS-GENERATE-SYNTHETIC-DATA`        | Generates new synthetic data from existing real recorded episodes           |
 
 The chaining is straightforward:
 
 - **Case 1 (HDF5):** Pipeline 1 → automatically triggers Pipeline 3
 - **Case 2 (LeRobot):** Pipeline 2 → automatically triggers Pipeline 3
+- Case 3 (Synthetic Data): Pipeline 4 → automatically triggers Pipeline 1 → automatically triggers Pipeline 3
 
 > **Before running any pipeline**, you must set the Brev token in your terminal:
 > ```bash
@@ -27,15 +29,9 @@ The chaining is straightforward:
 
 ## Case 1: Starting from an HDF5 Dataset
 
-**Step 1 — Upload the HDF5 file**
+**Step 1 — Upload the HDF5 files**
 
-Place your `.hdf5` file in: `Catalog → Workspace → default → Volumes → hdf5_datasets`
-
-Then set the dataset name as a secret (without the `.hdf5` extension):
-
-```bash
-databricks secrets put-secret brev hdf5_dataset_name --string-value "your-dataset-name"
-```
+Place your `.hdf5` files in: `Catalog → Workspace → default → Volumes → hdf5datasets_lehome_many_clothes`
 
 **Step 2 — Upload modality files**
 
