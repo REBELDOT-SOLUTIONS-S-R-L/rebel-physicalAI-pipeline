@@ -21,14 +21,6 @@ pipeline_runs (1 row per run)
 - `data_conversion_metrics`: `(run_id, episode_id)`
 - `video_conversion_metrics`: `(run_id, episode_id, camera)`
 
-**Example join:**
-```sql
-SELECT p.run_id, p.total_episodes, v.camera, AVG(v.encode_fps) AS avg_fps
-FROM pipeline_runs p
-JOIN video_conversion_metrics v ON p.run_id = v.run_id
-GROUP BY p.run_id, p.total_episodes, v.camera
-```
-
 ---
 
 ## Table 1: `video_conversion_metrics`
