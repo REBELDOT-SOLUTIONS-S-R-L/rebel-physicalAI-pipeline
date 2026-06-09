@@ -1,0 +1,44 @@
+resources:
+  jobs:
+    ai_robotics_generate_synthetic_data:
+      name: AI-ROBOTICS-GENERATE-SYNTHETIC-DATA
+      tasks:
+        - task_key: 0-brev-ssh-env-init
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-finetune-gr00t/0-brev-ssh-env-init.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: 1-add-mimicgen-dataset
+          depends_on:
+            - task_key: 0-brev-ssh-env-init
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-generate-synthetic-data/1-upload-mimicgen-dataset.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: 2-install-lehome-isaaclab-fork-and-start-generation
+          depends_on:
+            - task_key: 1-add-mimicgen-dataset
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-generate-synthetic-data/2-install-lehome-isaaclab-fork.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+      email_notifications:
+        no_alert_for_skipped_runs: false
+      max_concurrent_runs: 1
+      performance_target: PERFORMANCE_OPTIMIZED
+      queue:
+        enabled: true
+      timeout_seconds: 0
+      webhook_notifications: {}

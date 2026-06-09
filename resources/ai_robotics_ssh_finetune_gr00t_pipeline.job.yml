@@ -1,0 +1,44 @@
+resources:
+  jobs:
+    ai_robotics_ssh_finetune_gr00t_pipeline:
+      name: AI-ROBOTICS-SSH-FINETUNE-GR00T-PIPELINE
+      tasks:
+        - task_key: 1-brev-setup-env
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-finetune-gr00t/1-brev-setup-env.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: 2-gr00t-install
+          depends_on:
+            - task_key: 1-brev-setup-env
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-finetune-gr00t/2-gr00t-install.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: 3-gr00t-finetune
+          depends_on:
+            - task_key: 2-gr00t-install
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-finetune-gr00t/3-gr00t-finetune.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+      email_notifications:
+        no_alert_for_skipped_runs: false
+      max_concurrent_runs: 1
+      performance_target: PERFORMANCE_OPTIMIZED
+      queue:
+        enabled: true
+      timeout_seconds: 0
+      webhook_notifications: {}

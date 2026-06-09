@@ -1,1 +1,5 @@
 .idea/
+.databricks/
+typings/
+.venv/
+__pycache__/
