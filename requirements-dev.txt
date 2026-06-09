@@ -1,0 +1,4 @@
+ipykernel
+requests
+databricks-sdk
+databricks-connect>=16.1

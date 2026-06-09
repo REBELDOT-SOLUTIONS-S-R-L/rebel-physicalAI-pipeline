@@ -1,0 +1,33 @@
+resources:
+  jobs:
+    ai_robotics_pipeline_lerobot_upload:
+      name: AI-ROBOTICS-PIPELINE-LEROBOT-UPLOAD
+      tasks:
+        - task_key: 0-brev-ssh-init-env
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-finetune-gr00t/0-brev-ssh-env-init.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: 1-upload-lerobot-dataset
+          depends_on:
+            - task_key: 0-brev-ssh-init-env
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-upload-lerobot-dataset/1-upload-lerobot-dataset.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+      email_notifications:
+        no_alert_for_skipped_runs: false
+      max_concurrent_runs: 1
+      performance_target: PERFORMANCE_OPTIMIZED
+      queue:
+        enabled: true
+      timeout_seconds: 0
+      webhook_notifications: {}

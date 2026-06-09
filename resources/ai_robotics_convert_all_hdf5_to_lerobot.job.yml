@@ -1,0 +1,44 @@
+resources:
+  jobs:
+    ai_robotics_convert_all_hdf5_to_lerobot:
+      name: AI-ROBOTICS-CONVERT-ALL-HDF5-TO-LEROBOT
+      tasks:
+        - task_key: 0-brev-ssh-init-env
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-finetune-gr00t/0-brev-ssh-env-init.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: 1-convert-all-hdf5s-to-lerobots-and-save-to-databricks
+          depends_on:
+            - task_key: 0-brev-ssh-init-env
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-merge-lerobot-datasets/1-convert-all-hdf5-to-lerobot.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: 2-merge-all-lerobot-datasets
+          depends_on:
+            - task_key: 1-convert-all-hdf5s-to-lerobots-and-save-to-databricks
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-merge-lerobot-datasets/2-merge-all-lerobot-datasets.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+      email_notifications:
+        no_alert_for_skipped_runs: false
+      max_concurrent_runs: 1
+      performance_target: PERFORMANCE_OPTIMIZED
+      queue:
+        enabled: true
+      timeout_seconds: 0
+      webhook_notifications: {}

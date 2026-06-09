@@ -1,0 +1,32 @@
+resources:
+  jobs:
+    check_for_instances:
+      name: check-for-instances
+      tasks:
+        - task_key: check-for-instances
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../monitoring/check-for-instances.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+      email_notifications:
+        no_alert_for_skipped_runs: true
+        on_failure:
+          - lupsecristian2000@gmail.com
+          - antonio.rad@rebeldot.com
+      max_concurrent_runs: 1
+      notification_settings:
+        no_alert_for_canceled_runs: false
+        no_alert_for_skipped_runs: true
+      performance_target: PERFORMANCE_OPTIMIZED
+      queue:
+        enabled: true
+      schedule:
+        pause_status: UNPAUSED
+        quartz_cron_expression: 40 30 17 * * ?
+        timezone_id: Europe/Bucharest
+      timeout_seconds: 0
+      webhook_notifications: {}

@@ -1,0 +1,20 @@
+bundle:
+  name: physical-AI-training-pipeline
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-384b414f-2217.cloud.databricks.com
+
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-384b414f-2217.cloud.databricks.com
+      root_path: /Workspace/Users/lupsecristian2000@gmail.com/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      user_name: lupsecristian2000@gmail.com

@@ -124,6 +124,61 @@ databricks secrets get-secret <scope-name> <key-name> | jq -r .value | base64 --
 
 ---
 
+## Development Workflow — Syncing Local Changes to Databricks
+
+After editing notebooks locally, push the changes to Databricks before running. Pick the path that matches the type of change.
+
+### Path 1 — Git roundtrip (changes you want in git history)
+
+```bash
+# edit notebook
+git add <file>
+git commit -m "..."
+git push origin main
+databricks repos update 1953498477809847 --branch main   # pull Git Folder
+```
+
+One-liner:
+
+```bash
+git push origin main && databricks repos update 1953498477809847 --branch main
+```
+
+Then in the Databricks UI: open the notebook under `/Users/lupsecristian2000@gmail.com/ROBOTICS-AI-training-pipeline/...` → Run, or trigger the job from Workflows.
+
+### Path 2 — Bundle deploy (quick iteration, no commit needed)
+
+```bash
+databricks bundle deploy -t dev
+```
+
+Uploads all repo files to `/Workspace/Users/<you>/.bundle/physical-AI-training-pipeline/dev/files/...` and creates `[dev <you>] AI-ROBOTICS-...` jobs. Production jobs are untouched.
+
+In the Databricks UI:
+- Open the notebook at the bundle path → Run cells manually, or
+- Workflows → run the `[dev <you>] AI-ROBOTICS-...` job.
+
+Re-run `databricks bundle deploy -t dev` after each edit.
+
+### When to use which
+
+| Situation | Path |
+|-----------|------|
+| Tweak + verify on real compute, throwaway | Path 2 |
+| Change you want in git history | Path 1 |
+| Mixed | Iterate on Path 2, then commit + push (Path 1) once happy |
+
+### Verify sync
+
+```bash
+git rev-parse HEAD
+databricks repos get 1953498477809847 | jq -r .head_commit_id
+```
+
+Matching SHAs = Git Folder is up to date with local.
+
+---
+
 ## Support
 
 For questions or issues, reach out to:
