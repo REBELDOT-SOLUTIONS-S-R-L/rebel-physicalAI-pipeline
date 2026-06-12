@@ -3,7 +3,18 @@ resources:
     ai_robotics_ssh_finetune_gr00t_pipeline:
       name: AI-ROBOTICS-SSH-FINETUNE-GR00T-PIPELINE
       tasks:
+        - task_key: 0-brev-ssh-init-env
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../pipeline-finetune-gr00t/0-brev-ssh-env-init.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
         - task_key: 1-brev-setup-env
+          depends_on:
+            - task_key: 0-brev-ssh-init-env
           disabled: false
           email_notifications: {}
           notebook_task:
