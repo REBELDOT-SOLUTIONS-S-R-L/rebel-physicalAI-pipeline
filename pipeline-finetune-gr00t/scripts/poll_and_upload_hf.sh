@@ -58,17 +58,39 @@ if [ ! -d "${MODEL_DIR}" ]; then
 fi
 
 if REPO_ID="${REPO_ID}" MODEL_DIR="${MODEL_DIR}" "${VENV_PY}" - <<'PY'
-import os
-from huggingface_hub import create_repo, upload_large_folder
+import os, time
+from huggingface_hub import create_repo, upload_large_folder, HfApi
 
 repo = os.environ["REPO_ID"]
 folder = os.environ["MODEL_DIR"]
 
-# Private model repo; no-op if it already exists.
-create_repo(repo, repo_type="model", private=True, exist_ok=True)
+# PUBLIC model repo (private repos count against the small free private-storage
+# quota; public storage is free). no-op if it already exists.
+create_repo(repo, repo_type="model", private=False, exist_ok=True)
 
-# Resumable upload of the whole directory (all checkpoints).
-upload_large_folder(repo_id=repo, folder_path=folder, repo_type="model")
+# If it already existed as private, flip it to public.
+api = HfApi()
+try:
+    api.update_repo_settings(repo_id=repo, repo_type="model", private=False)
+except Exception:
+    try:
+        api.update_repo_visibility(repo_id=repo, repo_type="model", private=False)
+    except Exception as e:
+        print(f"[poll_and_upload_hf] could not flip visibility (continuing): {e}")
+
+# Resumable upload of the whole directory (all checkpoints). HF rate limits use
+# 5-minute fixed windows and upload commits are NOT auto-retried, so retry across
+# windows; upload_large_folder resumes where it left off.
+for attempt in range(1, 7):
+    try:
+        upload_large_folder(repo_id=repo, folder_path=folder, repo_type="model")
+        break
+    except Exception as e:
+        if attempt == 6:
+            raise
+        print(f"[poll_and_upload_hf] upload attempt {attempt} failed ({e}); "
+              f"waiting 300s for the rate-limit window to reset, then resuming")
+        time.sleep(300)
 
 print(f"[poll_and_upload_hf] uploaded {folder} -> https://huggingface.co/{repo}")
 PY
