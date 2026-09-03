@@ -1,4 +1,8 @@
-# How to Use the Pipelines
+# rebel-physicalAI-pipeline
+
+Databricks pipelines for converting, uploading, and fine-tuning robotics datasets with GR00T.
+
+## How to Use the Pipelines
 
 There are two main workflows depending on your dataset format:
 
@@ -185,3 +189,9 @@ For questions or issues, reach out to:
 
 - **Cristi Lupse** — cristian.lupse@rebeldot.com
 - **Antonio Rad** — antonio.rad@rebeldot.com
+
+## Credits
+
+Developed by **Cristian Lupse** and **Antonio Rad** at [**RebelDot**](https://www.rebeldot.com/)
+
+![RebelDot logo](assets/logos/rebeldot-logo-tagline-white-yellow@3x.png)
