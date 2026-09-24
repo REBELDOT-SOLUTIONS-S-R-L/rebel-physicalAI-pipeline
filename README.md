@@ -1,3 +1,10 @@
+
+<p align="center">
+  <a href="https://rebeldot.com">
+    <img src="assets/logos/rebeldot-logo-tagline-white-yellow@3x.png" alt="RebelDot — Physical AI department" width="320">
+  </a>
+</p>
+
 # rebel-physicalAI-pipeline
 
 Databricks pipelines for converting, uploading, and fine-tuning robotics datasets with GR00T.
@@ -194,4 +201,8 @@ For questions or issues, reach out to:
 
 Developed by **Cristian Lupse** and **Antonio Rad** at [**RebelDot**](https://www.rebeldot.com/)
 
-![RebelDot logo](assets/logos/rebeldot-logo-tagline-white-yellow@3x.png)
+<p align="center">
+  <a href="https://rebeldot.com">
+    <img src="assets/logos/rebeldot-logo-tagline-white-yellow@3x.png" alt="RebelDot — Physical AI department" width="320">
+  </a>
+</p>
